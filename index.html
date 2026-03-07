@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Criativo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="universe">
+        <!-- Background Elements -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        
+        <header class="cosmic-header">
+            <div class="brand">
+                <div class="logo-pulse">
+                    <span class="logo-symbol">◈</span>
+                </div>
+                <div class="brand-text">
+                    <h1 class="glitch" data-text="NEON">Neon</h1>
+                    <span class="tagline">Controle de Contas</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="galaxy">
+            <!-- Portal Cards -->
+            <div class="constellation">
+                <div class="portal" onclick="abrirModal('produtos')">
+                    <div class="portal-glow"></div>
+                    <div class="portal-content">
+                        <div class="icon-wrap">
+                            <span class="portal-icon">🧬</span>
+                            <div class="icon-ring"></div>
+                        </div>
+                        <h2 class="portal-title">Produtos</h2>
+                        <p class="portal-count" id="count-produtos">0 itens</p>
+                        <div class="portal-arrow">⟶</div>
+                    </div>
+                    <div class="liquid-bg"></div>
+                </div>
+
+                <div class="portal" onclick="abrirModal('clientes')">
+                    <div class="portal-glow"></div>
+                    <div class="portal-content">
+                        <div class="icon-wrap">
+                            <span class="portal-icon">👾</span>
+                            <div class="icon-ring"></div>
+                        </div>
+                        <h2 class="portal-title">Clientes</h2>
+                        <p class="portal-count" id="count-clientes">0 contas</p>
+                        <div class="portal-arrow">⟶</div>
+                    </div>
+                    <div class="liquid-bg"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal Produtos -->
+        <div id="modal-produtos" class="dimension">
+            <div class="dimension-gate">
+                <div class="gate-header">
+                    <div class="gate-title">
+                        <span class="gate-icon">🧬</span>
+                        <div>
+                            <h2>Matrix de Produtos</h2>
+                            <span class="gate-sub">Catálogo dimensional</span>
+                        </div>
+                    </div>
+                    <button class="gate-close" onclick="fecharModal('produtos')">✕</button>
+                </div>
+
+                <div class="gate-body">
+                    <div class="input-matrix">
+                        <h3 class="matrix-label">Novo Item</h3>
+                        <div class="input-wormhole">
+                            <div class="input-field floating">
+                                <input type="text" id="produtoNome" placeholder=" " required>
+                                <label>Nome do produto</label>
+                                <div class="input-line"></div>
+                            </div>
+                            <div class="input-field floating small">
+                                <input type="number" id="produtoPreco" placeholder=" " step="0.01" required>
+                                <label>Preço R$</label>
+                                <div class="input-line"></div>
+                            </div>
+                            <button onclick="adicionarProduto()" class="btn-crystal">
+                                <span class="btn-text">Criar</span>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="data-stream">
+                        <h3 class="stream-title">Itens Cadastrados</h3>
+                        <div id="listaProdutos" class="alpha-constellation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Clientes -->
+        <div id="modal-clientes" class="dimension">
+            <div class="dimension-gate">
+                <div class="gate-header">
+                    <div class="gate-title">
+                        <span class="gate-icon">👾</span>
+                        <div>
+                            <h2>Rede de Clientes</h2>
+                            <span class="gate-sub">Conexões ativas</span>
+                        </div>
+                    </div>
+                    <button class="gate-close" onclick="fecharModal('clientes')">✕</button>
+                </div>
+
+                <div class="gate-body">
+                    <div class="input-matrix">
+                        <h3 class="matrix-label">Novo Cliente</h3>
+                        <div class="input-wormhole">
+                            <div class="input-field floating">
+                                <input type="text" id="clienteNome" placeholder=" " required>
+                                <label>Nome completo</label>
+                                <div class="input-line"></div>
+                            </div>
+                            <button onclick="adicionarCliente()" class="btn-crystal">
+                                <span class="btn-text">Conectar</span>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="data-stream">
+                        <h3 class="stream-title">Contas Ativas</h3>
+                        <div id="listaClientesResumo" class="alpha-constellation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Detalhes -->
+        <div id="modal-detalhes" class="dimension">
+            <div class="dimension-gate large">
+                <div class="gate-header">
+                    <div class="gate-title">
+                        <span class="gate-icon">⚡</span>
+                        <div>
+                            <h2 id="titulo-detalhes">Perfil</h2>
+                            <span class="gate-sub" id="subtitulo-detalhes">Análise de dados</span>
+                        </div>
+                    </div>
+                    <button class="gate-close" onclick="fecharModal('detalhes')">✕</button>
+                </div>
+
+                <div class="gate-body">
+                    <div id="resumo-cliente" class="holo-display"></div>
+                    
+                    <div class="split-dimension">
+                        <div class="data-cube">
+                            <div class="cube-header">
+                                <span class="cube-icon">🛸</span>
+                                <h3>Consumos</h3>
+                            </div>
+                            <div class="cube-form">
+                                <select id="select-produto" class="select-glass">
+                                    <option value="">Selecionar item...</option>
+                                </select>
+                                <button onclick="adicionarConsumo()" class="btn-crystal small">
+                                    <span class="btn-text">Adicionar</span>
+                                </button>
+                            </div>
+                            <div id="lista-consumos" class="cube-content"></div>
+                            <div class="cube-total">
+                                <span>Total:</span>
+                                <strong id="total-consumos">R$ 0,00</strong>
+                            </div>
+                        </div>
+
+                        <div class="data-cube">
+                            <div class="cube-header">
+                                <span class="cube-icon">💎</span>
+                                <h3>Pagamentos</h3>
+                            </div>
+                            <div class="cube-form">
+                                <div class="input-field floating">
+                                    <input type="number" id="valor-pagamento" placeholder=" " step="0.01">
+                                    <label>Valor R$</label>
+                                    <div class="input-line"></div>
+                                </div>
+                                <button onclick="registrarPagamento()" class="btn-crystal small secondary">
+                                    <span class="btn-text">Registrar</span>
+                                </button>
+                            </div>
+                            <div id="lista-pagamentos" class="cube-content"></div>
+                            <div class="cube-total">
+                                <span>Total:</span>
+                                <strong id="total-pagamentos">R$ 0,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+        let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+        let clienteAtual = null;
+
+        function salvarDados() {
+            localStorage.setItem('produtos', JSON.stringify(produtos));
+            localStorage.setItem('clientes', JSON.stringify(clientes));
+            atualizarContadores();
+        }
+
+        function atualizarContadores() {
+            document.getElementById('count-produtos').textContent = `${produtos.length} item${produtos.length !== 1 ? 's' : ''}`;
+            document.getElementById('count-clientes').textContent = `${clientes.length} conta${clientes.length !== 1 ? 's' : ''}`;
+        }
+
+        function abrirModal(tipo) {
+            document.getElementById(`modal-${tipo}`).classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (tipo === 'produtos') renderizarProdutos();
+            if (tipo === 'clientes') renderizarClientesLista();
+        }
+
+        function fecharModal(tipo) {
+            document.getElementById(`modal-${tipo}`).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('dimension')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function agruparPorLetra(lista, propriedade) {
+            const ordenado = lista.sort((a, b) => a[propriedade].localeCompare(b[propriedade], 'pt-BR'));
+            const grupos = {};
+            ordenado.forEach(item => {
+                const primeiraLetra = item[propriedade].charAt(0).toUpperCase();
+                if (!grupos[primeiraLetra]) grupos[primeiraLetra] = [];
+                grupos[primeiraLetra].push(item);
+            });
+            return grupos;
+        }
+
+        // Produtos
+        function adicionarProduto() {
+            const nome = document.getElementById('produtoNome').value.trim();
+            const preco = parseFloat(document.getElementById('produtoPreco').value);
+
+            if (!nome || isNaN(preco) || preco < 0) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            produtos.push({ id: Date.now(), nome, preco });
+            salvarDados();
+            
+            document.getElementById('produtoNome').value = '';
+            document.getElementById('produtoPreco').value = '';
+            renderizarProdutos();
+        }
+
+        function removerProduto(id) {
+            if (confirm('Deseja desintegrar este item?')) {
+                produtos = produtos.filter(p => p.id !== id);
+                salvarDados();
+                renderizarProdutos();
+            }
+        }
+
+        function renderizarProdutos() {
+            const container = document.getElementById('listaProdutos');
+            
+            if (produtos.length === 0) {
+                container.innerHTML = '<div class="void">Nenhum item na matrix</div>';
+                return;
+            }
+
+            const grupos = agruparPorLetra(produtos, 'nome');
+            
+            container.innerHTML = Object.keys(grupos).sort().map(letra => `
+                <div class="alpha-cluster">
+                    <div class="cluster-atom">${letra}</div>
+                    <div class="cluster-items">
+                        ${grupos[letra].map(p => `
+                            <div class="data-particle">
+                                <div class="particle-core">
+                                    <span class="particle-name">${p.nome}</span>
+                                    <span class="particle-value">R$ ${p.preco.toFixed(2)}</span>
+                                </div>
+                                <button onclick="removerProduto(${p.id})" class="particle-delete">✦</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Clientes
+        function adicionarCliente() {
+            const nome = document.getElementById('clienteNome').value.trim();
+            
+            if (!nome) {
+                alert('Digite o nome do cliente!');
+                return;
+            }
+
+            const cliente = {
+                id: Date.now(),
+                nome,
+                consumos: [],
+                pagamentos: [],
+                totalConsumido: 0,
+                totalPago: 0
+            };
+
+            clientes.push(cliente);
+            salvarDados();
+            
+            document.getElementById('clienteNome').value = '';
+            renderizarClientesLista();
+        }
+
+        function removerCliente(id) {
+            if (confirm('Deseja desconectar este cliente?')) {
+                clientes = clientes.filter(c => c.id !== id);
+                salvarDados();
+                renderizarClientesLista();
+            }
+        }
+
+        function calcularSaldo(cliente) {
+            return cliente.totalConsumido - cliente.totalPago;
+        }
+
+        function renderizarClientesLista() {
+            const container = document.getElementById('listaClientesResumo');
+            
+            if (clientes.length === 0) {
+                container.innerHTML = '<div class="void">Nenhuma conexão ativa</div>';
+                return;
+            }
+
+            const grupos = agruparPorLetra(clientes, 'nome');
+            
+            container.innerHTML = Object.keys(grupos).sort().map(letra => `
+                <div class="alpha-cluster">
+                    <div class="cluster-atom">${letra}</div>
+                    <div class="cluster-items">
+                        ${grupos[letra].map(c => {
+                            const saldo = calcularSaldo(c);
+                            const statusClass = saldo > 0 ? 'debit' : saldo < 0 ? 'credit' : 'zero';
+                            const statusText = saldo > 0 ? 'DEV' : saldo < 0 ? 'CRÉD' : 'OK';
+                            
+                            return `
+                                <div class="data-particle client" onclick="abrirDetalhes(${c.id})">
+                                    <div class="particle-core">
+                                        <span class="particle-name">${c.nome}</span>
+                                        <span class="particle-badge ${statusClass}">${statusText}</span>
+                                    </div>
+                                    <div class="particle-side">
+                                        <span class="particle-balance ${statusClass}">R$ ${Math.abs(saldo).toFixed(2)}</span>
+                                        <button onclick="event.stopPropagation(); removerCliente(${c.id})" class="particle-delete">✦</button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function abrirDetalhes(clienteId) {
+            clienteAtual = clientes.find(c => c.id === clienteId);
+            const modal = document.getElementById('modal-detalhes');
+            
+            document.getElementById('titulo-detalhes').textContent = clienteAtual.nome;
+            document.getElementById('subtitulo-detalhes').textContent = `ID: ${clienteAtual.id.toString().slice(-6)}`;
+            
+            const saldo = calcularSaldo(clienteAtual);
+            const statusClass = saldo > 0 ? 'debit' : saldo < 0 ? 'credit' : 'zero';
+            const statusText = saldo > 0 ? 'DÉBITO PENDENTE' : saldo < 0 ? 'SALDO A FAVOR' : 'CONTA QUITADA';
+            
+            document.getElementById('resumo-cliente').innerHTML = `
+                <div class="holo-card ${statusClass}">
+                    <div class="holo-grid"></div>
+                    <div class="holo-content">
+                        <span class="holo-status">${statusText}</span>
+                        <span class="holo-value">R$ ${Math.abs(saldo).toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+
+            const select = document.getElementById('select-produto');
+            select.innerHTML = '<option value="">Selecionar item...</option>' +
+                produtos.sort((a, b) => a.nome.localeCompare(b.nome)).map(p => 
+                    `<option value="${p.id}">${p.nome} - R$ ${p.preco.toFixed(2)}</option>`
+                ).join('');
+
+            renderizarConsumos();
+            renderizarPagamentos();
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderizarConsumos() {
+            const container = document.getElementById('lista-consumos');
+            document.getElementById('total-consumos').textContent = `R$ ${clienteAtual.totalConsumido.toFixed(2)}`;
+            
+            if (clienteAtual.consumos.length === 0) {
+                container.innerHTML = '<div class="void-small">Matrix vazia</div>';
+                return;
+            }
+
+            const grupos = {};
+            clienteAtual.consumos.sort((a, b) => a.nome.localeCompare(b.nome)).forEach(c => {
+                const letra = c.nome.charAt(0).toUpperCase();
+                if (!grupos[letra]) grupos[letra] = [];
+                grupos[letra].push(c);
+            });
+
+            container.innerHTML = Object.keys(grupos).sort().map(letra => `
+                <div class="sub-cluster">
+                    <div class="sub-atom">${letra}</div>
+                    ${grupos[letra].map(c => `
+                        <div class="micro-particle">
+                            <div class="micro-info">
+                                <span class="micro-name">${c.nome}</span>
+                                <span class="micro-time">${c.data}</span>
+                            </div>
+                            <div class="micro-actions">
+                                <span class="micro-value">R$ ${c.preco.toFixed(2)}</span>
+                                <button onclick="removerConsumo(${c.id})" class="micro-delete">✕</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function renderizarPagamentos() {
+            const container = document.getElementById('lista-pagamentos');
+            document.getElementById('total-pagamentos').textContent = `R$ ${clienteAtual.totalPago.toFixed(2)}`;
+            
+            if (clienteAtual.pagamentos.length === 0) {
+                container.innerHTML = '<div class="void-small">Nenhum registro</div>';
+                return;
+            }
+
+            container.innerHTML = clienteAtual.pagamentos.sort((a, b) => b.id - a.id).map(p => `
+                <div class="micro-particle payment">
+                    <div class="micro-info">
+                        <span class="micro-name">Transferência</span>
+                        <span class="micro-time">${p.data}</span>
+                    </div>
+                    <span class="micro-value credit">R$ ${p.valor.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+
+        function adicionarConsumo() {
+            const select = document.getElementById('select-produto');
+            const produtoId = parseInt(select.value);
+            
+            if (!produtoId) {
+                alert('Selecione um item!');
+                return;
+            }
+            
+            const produto = produtos.find(p => p.id === produtoId);
+            
+            clienteAtual.consumos.push({
+                id: Date.now(),
+                nome: produto.nome,
+                preco: produto.preco,
+                data: new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            });
+            
+            clienteAtual.totalConsumido += produto.preco;
+            salvarDados();
+            renderizarConsumos();
+            atualizarResumo();
+        }
+
+        function removerConsumo(consumoId) {
+            const consumo = clienteAtual.consumos.find(c => c.id === consumoId);
+            clienteAtual.consumos = clienteAtual.consumos.filter(c => c.id !== consumoId);
+            clienteAtual.totalConsumido -= consumo.preco;
+            salvarDados();
+            renderizarConsumos();
+            atualizarResumo();
+        }
+
+        function registrarPagamento() {
+            const input = document.getElementById('valor-pagamento');
+            const valor = parseFloat(input.value);
+            
+            if (isNaN(valor) || valor <= 0) {
+                alert('Digite um valor válido!');
+                return;
+            }
+            
+            clienteAtual.pagamentos.push({
+                id: Date.now(),
+                valor: valor,
+                data: new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+            });
+            
+            clienteAtual.totalPago += valor;
+            salvarDados();
+            
+            input.value = '';
+            renderizarPagamentos();
+            atualizarResumo();
+        }
+
+        function atualizarResumo() {
+            const saldo = calcularSaldo(clienteAtual);
+            const statusClass = saldo > 0 ? 'debit' : saldo < 0 ? 'credit' : 'zero';
+            const statusText = saldo > 0 ? 'DÉBITO PENDENTE' : saldo < 0 ? 'SALDO A FAVOR' : 'CONTA QUITADA';
+            
+            document.getElementById('resumo-cliente').innerHTML = `
+                <div class="holo-card ${statusClass}">
+                    <div class="holo-grid"></div>
+                    <div class="holo-content">
+                        <span class="holo-status">${statusText}</span>
+                        <span class="holo-value">R$ ${Math.abs(saldo).toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            atualizarContadores();
+        };
+    </script>
+</body>
+</html>
