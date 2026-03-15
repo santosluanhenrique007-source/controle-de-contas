@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Odontológico - Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header dentista">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon dentista">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Prontuário Odontológico</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="paciente-info">
+                <div class="info-field">
+                    <label>Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                </div>
+                <div class="info-field">
+                    <label>Cartão SUS</label>
+                    <input type="text" id="cartaoSUS" name="cartaoSUS" placeholder="000 0000 0000 0000">
+                </div>
+                <div class="info-field">
+                    <label>Tipo de Atendimento</label>
+                    <select id="tipoAtendimento" name="tipoAtendimento">
+                        <option value="primeira">Primeira Consulta</option>
+                        <option value="retorno">Retorno</option>
+                        <option value="urgencia">Urgência</option>
+                        <option value="prevencao">Prevenção</option>
+                        <option value="especialidade">Especialidade</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <div id="triagensPendentesProfissional" style="display: none;"></div>
+
+            <form id="form-prontuario">
+                
+                <nav class="tabs-nav">
+                    <button type="button" class="tab-button active" onclick="mudarAba('anamnese')">
+                        <i class="fas fa-clipboard-list"></i> Anamnese
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('exame-clinico')">
+                        <i class="fas fa-search"></i> Exame Clínico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('odontograma')">
+                        <i class="fas fa-teeth"></i> Odontograma
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('diagnostico')">
+                        <i class="fas fa-diagnoses"></i> Diagnóstico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('tratamento')">
+                        <i class="fas fa-procedures"></i> Tratamento
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('historico')">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                </nav>
+
+                <!-- ANAMNESE -->
+                <section id="anamnese" class="tab-content active">
+                    <h2 class="section-title"><i class="fas fa-comments"></i> Anamnese Odontológica</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Queixa Principal</label>
+                            <textarea name="queixaDental" rows="3" placeholder="Motivo da consulta..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História da Moléstia Atual</label>
+                            <textarea name="hmaDental" rows="4" placeholder="Quando começou, evolução, fatores agravantes..."></textarea>
+                        </div>
+
+                        <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem; grid-column: 1 / -1;"><i class="fas fa-history"></i> Anamnese Bucal</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Última Consulta</label>
+                                <input type="text" name="ultimaConsulta" placeholder="Quanto tempo?">
+                            </div>
+                            <div class="form-group">
+                                <label>Higiene Bucal</label>
+                                <select name="higieneBucal">
+                                    <option value="boa">Boa (3x ao dia)</option>
+                                    <option value="regular">Regular (1-2x)</option>
+                                    <option value="ruim">Ruim</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Hábitos Parafuncionais</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="bruxismo"> Bruxismo</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="onicofagia"> Onicofagia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="mordida-labio"> Mordida de lábio</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="respiracao-bucal"> Respiração bucal</label>
+                            </div>
+                        </div>
+
+                        <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem; grid-column: 1 / -1;"><i class="fas fa-heartbeat"></i> Anamnese Geral</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Alergias</label>
+                                <textarea name="alergiasDental" rows="2" placeholder="Medicamentos, látex..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Doenças Sistêmicas</label>
+                                <textarea name="doencasSistemicas" rows="2" placeholder="Diabetes, hipertensão..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Medicações em Uso</label>
+                            <textarea name="medicacoesDental" rows="2" placeholder="Anticoagulantes, bisfosfonatos..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Gravidez/Amamentação</label>
+                            <select name="gravidez">
+                                <option value="nao-aplicavel">Não aplicável</option>
+                                <option value="nao">Não</option>
+                                <option value="primeiro">1º Trimestre</option>
+                                <option value="segundo">2º Trimestre</option>
+                                <option value="terceiro">3º Trimestre</option>
+                                <option value="amamentando">Amamentando</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXAME CLÍNICO -->
+                <section id="exame-clinico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-search"></i> Exame Clínico Bucal</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Extra-Bucal</label>
+                                <textarea name="extrabucal" rows="3" placeholder="Face, linfonodos, ATM..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Lábios</label>
+                                <textarea name="labios" rows="3" placeholder="Comissuras, mucosa..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Língua</label>
+                                <textarea name="lingua" rows="3" placeholder="Cor, saburra..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Gengiva</label>
+                                <textarea name="gengiva" rows="3" placeholder="Cor, textura, sangramento..."></textarea>
+                            </div>
+                        </div>
+
+                        <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem; grid-column: 1 / -1;"><i class="fas fa-joint"></i> ATM</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Palpação</label>
+                                <select name="palpacaoATM">
+                                    <option value="sem-alteracao">Sem alteração</option>
+                                    <option value="dor-leve">Dor leve</option>
+                                    <option value="dor-moderada">Dor moderada</option>
+                                    <option value="dor-intensa">Dor intensa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ruídos</label>
+                                <select name="ruidosATM">
+                                    <option value="ausente">Ausentes</option>
+                                    <option value="estalido">Estalido/Clique</option>
+                                    <option value="crepitacao">Crepitação</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ODONTOGRAMA -->
+                <section id="odontograma" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-teeth"></i> Odontograma</h2>
+                    
+                    <div class="highlight-card" style="background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-color: #0ea5e9;">
+                        <h4 style="color: #0c4a6e;"><i class="fas fa-info-circle"></i> Legenda</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>1</strong> = Extrair</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>2</strong> = Restaurar</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>3</strong> = Canal</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>4</strong> = Prótese</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>5</strong> = Saudável</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>6</strong> = Extraído</span>
+                            <span style="background: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem;"><strong>7</strong> = Prótese Existente</span>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem;">Quadrante Superior Direito (18-11)</h3>
+                    <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        ${[18,17,16,15,14,13,12,11].map(num => `
+                        <div class="form-group">
+                            <label>${num}</label>
+                            <select name="dente${num}">
+                                <option value="5">5 - Saudável</option>
+                                <option value="1">1 - Extrair</option>
+                                <option value="2">2 - Restaurar</option>
+                                <option value="3">3 - Canal</option>
+                                <option value="6">6 - Extraído</option>
+                                <option value="7">7 - Prótese</option>
+                            </select>
+                        </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem;">Quadrante Superior Esquerdo (21-28)</h3>
+                    <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        ${[21,22,23,24,25,26,27,28].map(num => `
+                        <div class="form-group">
+                            <label>${num}</label>
+                            <select name="dente${num}">
+                                <option value="5">5 - Saudável</option>
+                                <option value="1">1 - Extrair</option>
+                                <option value="2">2 - Restaurar</option>
+                                <option value="3">3 - Canal</option>
+                                <option value="6">6 - Extraído</option>
+                                <option value="7">7 - Prótese</option>
+                            </select>
+                        </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem;">Quadrante Inferior Esquerdo (31-38)</h3>
+                    <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        ${[31,32,33,34,35,36,37,38].map(num => `
+                        <div class="form-group">
+                            <label>${num}</label>
+                            <select name="dente${num}">
+                                <option value="5">5 - Saudável</option>
+                                <option value="1">1 - Extrair</option>
+                                <option value="2">2 - Restaurar</option>
+                                <option value="3">3 - Canal</option>
+                                <option value="6">6 - Extraído</option>
+                                <option value="7">7 - Prótese</option>
+                            </select>
+                        </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 style="font-size: 1rem; color: #374151; margin: 1.5rem 0 1rem;">Quadrante Inferior Direito (48-41)</h3>
+                    <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        ${[48,47,46,45,44,43,42,41].map(num => `
+                        <div class="form-group">
+                            <label>${num}</label>
+                            <select name="dente${num}">
+                                <option value="5">5 - Saudável</option>
+                                <option value="1">1 - Extrair</option>
+                                <option value="2">2 - Restaurar</option>
+                                <option value="3">3 - Canal</option>
+                                <option value="6">6 - Extraído</option>
+                                <option value="7">7 - Prótese</option>
+                            </select>
+                        </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Observações do Odontograma</label>
+                        <textarea name="obsOdontograma" rows="4" placeholder="Dentes em erupção, ausentes, anomalias..."></textarea>
+                    </div>
+                </section>
+
+                <!-- DIAGNÓSTICO -->
+                <section id="diagnostico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-diagnoses"></i> Diagnóstico Odontológico</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Diagnóstico Principal</label>
+                            <select name="diagnosticoPrincipalDental">
+                                <option value="">Selecione</option>
+                                <option value="caries">Cárie Dentária</option>
+                                <option value="periodontite">Periodontite</option>
+                                <option value="gengivite">Gengivite</option>
+                                <option value="pulpite">Pulpite</option>
+                                <option value="necrose">Necrose Pulpar</option>
+                                <option value="periapical">Lesão Periapical</option>
+                                <option value="edente">Edêntulo</option>
+                                <option value="maloclusao">Maloclusão</option>
+                                <option value="atm">Disfunção da ATM</option>
+                                <option value="bruxismo">Bruxismo</option>
+                                <option value="saude-bucal">Saúde Bucal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Condição Periodontal</label>
+                            <select name="condicaoPeriodontal">
+                                <option value="saudavel">Saudável</option>
+                                <option value="gingivite">Gingivite</option>
+                                <option value="periodontite-leve">Periodontite Leve</option>
+                                <option value="periodontite-moderada">Periodontite Moderada</option>
+                                <option value="periodontite-grave">Periodontite Grave</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Diagnósticos Secundários</label>
+                            <textarea name="diagnosticosSecundariosDental" rows="3" placeholder="Outros diagnósticos..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TRATAMENTO -->
+                <section id="tratamento" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-procedures"></i> Plano de Tratamento</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Procedimentos Necessários</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="profilaxia"> Profilaxia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="restauracao"> Restaurações</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="tratamento-canal"> Tratamento de Canal</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="extracao"> Extrações</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="raspagem"> Raspagem/Surfagem</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="protese"> Prótese</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="implante"> Implante</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="aparelho"> Aparelho Ortodôntico</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="fluor"> Aplicação de Flúor</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="selante"> Selantes</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Descrição do Plano</label>
+                            <textarea name="planoTratamentoDental" rows="6" placeholder="Detalhamento dos procedimentos, prioridades, sequência..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Prioridade</label>
+                                <select name="prioridadeDental">
+                                    <option value="baixa">Baixa</option>
+                                    <option value="media">Média</option>
+                                    <option value="alta">Alta</option>
+                                    <option value="urgente">Urgente</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sessões Previstas</label>
+                                <input type="number" name="sessoesPrevistas" placeholder="Quantidade">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Orientações ao Paciente</label>
+                            <textarea name="orientacoesDental" rows="3" placeholder="Cuidados pós-operatórios, higiene, retornos..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section id="historico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-history"></i> Meus Atendimentos</h2>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            Clique em <strong>Editar</strong> para modificar um prontuário existente, ou <strong>Visualizar</strong> para ver os detalhes completos.
+                            <br><small style="color: #8b5cf6;"><i class="fas fa-clipboard-check"></i> Prontuários marcados com "Triagem" foram encaminhados pela recepção.</small>
+                        </span>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Procedimento</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-atendimentos">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProntuario()">
+                        <i class="fas fa-save"></i> Salvar Prontuário
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

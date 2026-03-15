@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triagem - Recepcionista | Posto de Saúde Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header recepcionista">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon recepcionista">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Triagem de Pacientes</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir Fila
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <div class="triagem-grid">
+                
+                <!-- Formulário de Triagem -->
+                <div class="triagem-form">
+                    <h2 class="section-title"><i class="fas fa-user-plus"></i> Nova Triagem</h2>
+                    
+                    <form id="formTriagem" onsubmit="return salvarTriagem(event)">
+                        
+                        <div class="form-grid" style="grid-template-columns: 1fr;">
+                            <div class="form-group">
+                                <label>Nome do Paciente *</label>
+                                <input type="text" id="nomePacienteTriagem" name="nomePaciente" placeholder="Nome completo do paciente" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>CPF</label>
+                                    <input type="text" id="cpfTriagem" name="cpf" placeholder="000.000.000-00" data-mask="cpf" maxlength="14">
+                                </div>
+                                <div class="form-group">
+                                    <label>Data de Nascimento</label>
+                                    <input type="date" name="dataNascimento">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="text" name="telefone" placeholder="(00) 00000-0000" data-mask="telefone">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Queixa Principal *</label>
+                                <textarea name="queixaPrincipal" id="queixaPrincipal" rows="3" placeholder="Descreva o motivo da consulta..." required></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Prioridade *</label>
+                                    <select id="prioridadeTriagem" name="prioridade" required>
+                                        <option value="normal">Normal</option>
+                                        <option value="prioritario">Prioritário</option>
+                                        <option value="urgente">Urgente</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Profissional Destino *</label>
+                                    <select id="profissionalDestino" name="profissionalDestino" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="medico">Médico</option>
+                                        <option value="enfermeiro">Enfermeiro</option>
+                                        <option value="nutricionista">Nutricionista</option>
+                                        <option value="fisioterapeuta">Fisioterapeuta</option>
+                                        <option value="dentista">Dentista</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <h3 style="font-size: 1rem; color: #374151; margin-bottom: 1rem;"><i class="fas fa-stethoscope"></i> Sinais Vitais (Opcional)</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Pressão Arterial</label>
+                                    <input type="text" name="pressao" placeholder="120/80">
+                                </div>
+                                <div class="form-group">
+                                    <label>Frequência Cardíaca (bpm)</label>
+                                    <input type="number" name="freqCardiaca" placeholder="72">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Temperatura (°C)</label>
+                                    <input type="number" name="temperatura" placeholder="36.5" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Saturação O2 (%)</label>
+                                    <input type="number" name="saturacao" placeholder="98" min="0" max="100">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Glicemia Capilar (mg/dL)</label>
+                                <input type="number" name="glicemia" placeholder="100">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Peso (kg)</label>
+                                <input type="number" name="peso" placeholder="70.5" step="0.1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Observações da Triagem</label>
+                                <textarea name="observacoes" rows="3" placeholder="Informações adicionais relevantes..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Alergias Conhecidas</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="dipirona"> Dipirona
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="penicilina"> Penicilina
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="sulfas"> Sulfas
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="lactose"> Lactose
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="gluten"> Glúten
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="alergias" value="outros"> Outros
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="erroTriagem" class="error-message" style="display: none;"></div>
+                            
+                            <div class="form-actions" style="position: relative; margin: 1.5rem 0 0; padding: 0; border: none; box-shadow: none;">
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('formTriagem').reset()">
+                                    <i class="fas fa-eraser"></i> Limpar
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-paper-plane"></i> Encaminhar Paciente
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Fila de Espera -->
+                <div class="triagem-lista">
+                    <h2 class="section-title"><i class="fas fa-list-ol"></i> Fila de Espera</h2>
+                    <p style="color: #6b7280; margin-bottom: 1rem; font-size: 0.875rem;">
+                        Pacientes aguardando atendimento, ordenados por prioridade:
+                    </p>
+                    
+                    <div id="filaTriagem" class="fila-triagem">
+                        <div style="text-align: center; padding: 3rem; color: #9ca3af;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>Carregando fila...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="login-footer" style="margin-top: 2rem;">
+        <p>© 2026 Prefeitura Municipal de Nossa Senhora De Lourdes</p>
+        <p>Secretaria Municipal de Saúde - Sistema de Prontuários Eletrônicos v2.0</p>
+    </footer>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

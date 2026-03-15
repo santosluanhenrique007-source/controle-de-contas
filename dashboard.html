@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gerencial - Posto de Saúde Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-page">
+    
+    <!-- Cabeçalho -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Posto de Saúde - Nossa Senhora De Lourdes</h1>
+                    <span>Dashboard Gerencial</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+                <button class="btn-header primary" onclick="window.location.href='cadastro.html'">
+                    <i class="fas fa-user-plus"></i> Cadastrar Funcionários
+                </button>
+                <button class="btn-header danger" onclick="fazerLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        
+        <!-- Boas-vindas -->
+        <div class="welcome-section">
+            <div>
+                <h2><i class="fas fa-crown" style="color: #f59e0b;"></i> Bem-vindo, <span id="nomeGerente">Gerente</span></h2>
+                <p>Você tem acesso a todos os prontuários do posto de saúde, organizados por área de atendimento.</p>
+            </div>
+        </div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-icon">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statTotal">0</span>
+                    <span class="stat-label">Total de Prontuários</span>
+                </div>
+            </div>
+            
+            <div class="stat-card hoje">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statHoje">0</span>
+                    <span class="stat-label">Atendimentos Hoje</span>
+                </div>
+            </div>
+            
+            <div class="stat-card medico">
+                <div class="stat-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statMedicos">0</span>
+                    <span class="stat-label">Médicos</span>
+                </div>
+            </div>
+            
+            <div class="stat-card enfermeiro">
+                <div class="stat-icon">
+                    <i class="fas fa-user-nurse"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statEnfermeiros">0</span>
+                    <span class="stat-label">Enfermagem</span>
+                </div>
+            </div>
+            
+            <div class="stat-card nutricionista">
+                <div class="stat-icon">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statNutricionistas">0</span>
+                    <span class="stat-label">Nutrição</span>
+                </div>
+            </div>
+            
+            <div class="stat-card fisioterapeuta">
+                <div class="stat-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statFisios">0</span>
+                    <span class="stat-label">Fisioterapia</span>
+                </div>
+            </div>
+            
+            <div class="stat-card dentista">
+                <div class="stat-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statDentistas">0</span>
+                    <span class="stat-label">Odontologia</span>
+                </div>
+            </div>
+            
+            <div class="stat-card recepcionista">
+                <div class="stat-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statRecepcionistas">0</span>
+                    <span class="stat-label">Triagens</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Triagens Pendentes (visível para gerente) -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-clipboard-list" style="color: #8b5cf6;"></i> Triagens Pendentes</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">Pacientes aguardando atendimento após triagem:</p>
+            <div id="triagensPendentes">
+                <p style="color: #9ca3af; text-align: center; padding: 2rem;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i> Carregando...
+                </p>
+            </div>
+        </div>
+
+        <!-- Seção de Prontuários -->
+        <div class="dashboard-section">
+            <div class="section-header-with-filter">
+                <h2><i class="fas fa-clipboard-list"></i> Todos os Prontuários</h2>
+                
+                <!-- Filtros por profissão -->
+                <div class="filter-tabs">
+                    <button class="filter-btn active" onclick="filtrarPorProfissao('todos')">
+                        <i class="fas fa-th-large"></i> Todos
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorProfissao('medico')">
+                        <i class="fas fa-user-md"></i> Médicos
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorProfissao('enfermeiro')">
+                        <i class="fas fa-user-nurse"></i> Enfermagem
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorProfissao('nutricionista')">
+                        <i class="fas fa-apple-alt"></i> Nutrição
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorProfissao('fisioterapeuta')">
+                        <i class="fas fa-running"></i> Fisioterapia
+                    </button>
+                    <button class="filter-btn" onclick="filtrarPorProfissao('dentista')">
+                        <i class="fas fa-tooth"></i> Odontologia
+                    </button>
+                </div>
+            </div>
+
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Paciente</th>
+                            <th>Área/Profissão</th>
+                            <th>Profissional</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaProntuariosGeral">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin"></i> Carregando...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Seção de Profissionais -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-users"></i> Equipe de Profissionais</h2>
+            
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Área</th>
+                            <th>Tipo</th>
+                            <th>Atendimentos/Triagens</th>
+                            <th>Usuário</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaProfissionais">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin"></i> Carregando...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Acesso Rápido aos Prontuários -->
+        <div class="dashboard-section">
+            <h2><i class="fas fa-external-link-alt"></i> Acesso Rápido aos Prontuários</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">Clique para visualizar prontuários de cada área (modo apenas leitura):</p>
+            
+            <div class="quick-access-grid">
+                <a href="../prontuarios/medico.html?modo=visualizar" class="quick-card medico" onclick="event.preventDefault(); showToast('Gerentes só podem visualizar prontuários existentes', 'info'); window.location.href='../prontuarios/medico.html';">
+                    <i class="fas fa-user-md"></i>
+                    <span>Prontuário Médico</span>
+                </a>
+                <a href="../prontuarios/enfermeiro.html" class="quick-card enfermeiro">
+                    <i class="fas fa-user-nurse"></i>
+                    <span>Prontuário de Enfermagem</span>
+                </a>
+                <a href="../prontuarios/nutricionista.html" class="quick-card nutricionista">
+                    <i class="fas fa-apple-alt"></i>
+                    <span>Prontuário Nutricional</span>
+                </a>
+                <a href="../prontuarios/fisioterapeuta.html" class="quick-card fisioterapeuta">
+                    <i class="fas fa-running"></i>
+                    <span>Prontuário Fisioterapêutico</span>
+                </a>
+                <a href="../prontuarios/dentista.html" class="quick-card dentista">
+                    <i class="fas fa-tooth"></i>
+                    <span>Prontuário Odontológico</span>
+                </a>
+                <a href="../prontuarios/recepcionista.html" class="quick-card recepcionista">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Triagem / Recepcionista</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="login-footer" style="margin-top: 3rem;">
+        <p>© 2026 Prefeitura Municipal de Nossa Senhora De Lourdes</p>
+        <p>Secretaria Municipal de Saúde - Sistema de Gestão de Prontuários v2.0</p>
+    </footer>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

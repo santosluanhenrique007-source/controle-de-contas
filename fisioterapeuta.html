@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Fisioterapêutico - Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header fisioterapeuta">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon fisioterapeuta">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Prontuário Fisioterapêutico</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="paciente-info">
+                <div class="info-field">
+                    <label>Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                </div>
+                <div class="info-field">
+                    <label>Cartão SUS</label>
+                    <input type="text" id="cartaoSUS" name="cartaoSUS" placeholder="000 0000 0000 0000">
+                </div>
+                <div class="info-field">
+                    <label>Encaminhamento</label>
+                    <select id="tipoEncaminhamento" name="tipoEncaminhamento">
+                        <option value="espontaneo">Espontâneo</option>
+                        <option value="medico">Médico</option>
+                        <option value="enfermagem">Enfermagem</option>
+                        <option value="triagem">Triagem</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <div id="triagensPendentesProfissional" style="display: none;"></div>
+
+            <form id="form-prontuario">
+                
+                <nav class="tabs-nav">
+                    <button type="button" class="tab-button active" onclick="mudarAba('avaliacao')">
+                        <i class="fas fa-clipboard-check"></i> Avaliação
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('exame-fisico')">
+                        <i class="fas fa-hand-holding-medical"></i> Exame Físico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('escalas')">
+                        <i class="fas fa-chart-bar"></i> Escalas
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('tratamento')">
+                        <i class="fas fa-procedures"></i> Tratamento
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('historico')">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                </nav>
+
+                <!-- AVALIAÇÃO -->
+                <section id="avaliacao" class="tab-content active">
+                    <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Avaliação Fisioterapêutica</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Queixa Principal *</label>
+                            <textarea name="queixaPrincipal" rows="3" placeholder="Motivo da consulta, limitações funcionais..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História da Moléstia Atual (HMA)</label>
+                            <textarea name="hma" rows="4" placeholder="Início dos sintomas, evolução, tratamentos anteriores, cirurgias..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História Patológica Pregressa</label>
+                            <textarea name="hpp" rows="3" placeholder="Doenças de base, comorbidades, medicações..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Diagnóstico Médico (se houver)</label>
+                            <input type="text" name="diagnosticoMedico" placeholder="CID ou descrição">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Objetivos do Tratamento</label>
+                            <select name="objetivos">
+                                <option value="reducao-dor">Redução da dor</option>
+                                <option value="ganho-rom">Ganho de ROM</option>
+                                <option value="fortalecimento">Fortalecimento muscular</option>
+                                <option value="reeducacao">Reeducação postural</option>
+                                <option value="marcha">Treino de marcha</option>
+                                <option value="adl">Independência para AVDs</option>
+                                <option value="retorno">Retorno ao trabalho/esporte</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXAME FÍSICO -->
+                <section id="exame-fisico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-hand-holding-medical"></i> Exame Físico</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Inspeção</label>
+                            <textarea name="inspecao" rows="3" placeholder="Postura, simetria, edemas, cicatrizes, atrofias..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Palpação</label>
+                            <textarea name="palpacao" rows="3" placeholder="Tensão muscular, pontos dolorosos, temperatura..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Amplitude de Movimento (ROM)</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem;">Membro Superior Direito</label>
+                                    <textarea name="romMSD" rows="2" placeholder="Ombro, cotovelo, punho..."></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">Membro Superior Esquerdo</label>
+                                    <textarea name="romMSE" rows="2" placeholder="Ombro, cotovelo, punho..."></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">Membro Inferior Direito</label>
+                                    <textarea name="romMID" rows="2" placeholder="Quadril, joelho, tornozelo..."></textarea>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">Membro Inferior Esquerdo</label>
+                                    <textarea name="romMIE" rows="2" placeholder="Quadril, joelho, tornozelo..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Força Muscular (Escala 0-5)</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem;">MSD</label>
+                                    <input type="text" name="forcaMSD" placeholder="Deltóide: 4, Bíceps: 4...">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">MSE</label>
+                                    <input type="text" name="forcaMSE" placeholder="Deltóide: 4, Bíceps: 4...">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">MID</label>
+                                    <input type="text" name="forcaMID" placeholder="Quadríceps: 4, Glúteo: 4...">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">MIE</label>
+                                    <input type="text" name="forcaMIE" placeholder="Quadríceps: 4, Glúteo: 4...">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Sensibilidade</label>
+                            <textarea name="sensibilidade" rows="2" placeholder="Tátil, térmica, dolorosa, propriocepção..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Testes Especiais</label>
+                            <textarea name="testesEspeciais" rows="3" placeholder="Testes ortopédicos específicos..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ESCALAS -->
+                <section id="escalas" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-chart-bar"></i> Escalas de Avaliação</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Escala Visual Analógica (EVA) - Dor</label>
+                            <input type="range" name="evaDor" min="0" max="10" value="0" style="width: 100%;" oninput="this.nextElementSibling.value = this.value">
+                            <output style="display: block; text-align: center; font-weight: 600; color: #2563eb; margin-top: 0.5rem;">0</output>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Índice de Barthel (AVDs)</label>
+                            <input type="number" name="barthel" placeholder="0-100" min="0" max="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Escala de Berg (Equilíbrio)</label>
+                            <input type="number" name="berg" placeholder="0-56" min="0" max="56">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Tinetti (Equilíbrio e Marcha)</label>
+                            <input type="number" name="tinetti" placeholder="0-28" min="0" max="28">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Timed Up and Go (TUG) - segundos</label>
+                            <input type="number" name="tug" placeholder="Segundos" step="0.1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Circunferência da Cintura (cm)</label>
+                            <input type="number" name="cintura" placeholder="cm" step="0.1">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Outras Escalas/Avaliações</label>
+                            <textarea name="outrasEscalas" rows="4" placeholder="Goniometria, dinamometria, avaliação postural específica..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TRATAMENTO -->
+                <section id="tratamento" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-procedures"></i> Plano Terapêutico</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Conduta Fisioterapêutica</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="cinesioterapia"> Cinesioterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="eletroterapia"> Eletroterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="termoterapia"> Termoterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="hidroterapia"> Hidroterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="massoterapia"> Massoterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="tracoes"> Trações</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="reeducacao-postural"> Reeducação Postural</label>
+                                <label class="checkbox-item"><input type="checkbox" name="conduta" value="treino-marcha"> Treino de Marcha</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Descrição do Tratamento</label>
+                            <textarea name="descricaoTratamento" rows="6" placeholder="Detalhamento das técnicas, parâmetros, evolução esperada..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Frequência de Atendimento</label>
+                                <select name="frequencia">
+                                    <option value="diario">Diário</option>
+                                    <option value="2x-semana">2x por semana</option>
+                                    <option value="3x-semana">3x por semana</option>
+                                    <option value="semanal">1x por semana</option>
+                                    <option value="quinzenal">Quinzenal</option>
+                                    <option value="mensal">Mensal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Número de Sessões Previstas</label>
+                                <input type="number" name="sessoesPrevistas" placeholder="Quantidade">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Exercícios para Casa</label>
+                            <textarea name="exerciciosCasa" rows="4" placeholder="Descrição dos exercícios, frequência, cuidados..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Orientações ao Paciente</label>
+                            <textarea name="orientacoes" rows="3" placeholder="Cuidados posturais, ergonomia, prevenção de recidivas..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section id="historico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-history"></i> Meus Atendimentos</h2>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            Clique em <strong>Editar</strong> para modificar um prontuário existente, ou <strong>Visualizar</strong> para ver os detalhes completos.
+                            <br><small style="color: #8b5cf6;"><i class="fas fa-clipboard-check"></i> Prontuários marcados com "Triagem" foram encaminhados pela recepção.</small>
+                        </span>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Queixa</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-atendimentos">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProntuario()">
+                        <i class="fas fa-save"></i> Salvar Prontuário
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Nutricional - Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header nutricionista">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon nutricionista">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Prontuário Nutricional</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="paciente-info">
+                <div class="info-field">
+                    <label>Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                </div>
+                <div class="info-field">
+                    <label>Cartão SUS</label>
+                    <input type="text" id="cartaoSUS" name="cartaoSUS" placeholder="000 0000 0000 0000">
+                </div>
+                <div class="info-field">
+                    <label>Sexo</label>
+                    <select id="sexo" name="sexo">
+                        <option value="">Selecione</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <div id="triagensPendentesProfissional" style="display: none;"></div>
+
+            <form id="form-prontuario">
+                
+                <nav class="tabs-nav">
+                    <button type="button" class="tab-button active" onclick="mudarAba('avaliacao')">
+                        <i class="fas fa-clipboard-check"></i> Avaliação
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('antropometria')">
+                        <i class="fas fa-ruler"></i> Antropometria
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('anamnese')">
+                        <i class="fas fa-comments"></i> Anamnese Alimentar
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('diagnostico')">
+                        <i class="fas fa-diagnoses"></i> Diagnóstico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('prescricao')">
+                        <i class="fas fa-utensils"></i> Prescrição
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('historico')">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                </nav>
+
+                <!-- AVALIAÇÃO -->
+                <section id="avaliacao" class="tab-content active">
+                    <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Avaliação Nutricional</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Queixa Principal *</label>
+                            <textarea name="queixaPrincipal" rows="3" placeholder="Motivo da consulta nutricional..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História Clínica</label>
+                            <textarea name="historiaClinica" rows="4" placeholder="Doenças de base, cirurgias, internações, história familiar..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Uso de Medicamentos</label>
+                            <textarea name="medicamentos" rows="3" placeholder="Medicamentos que podem interferir na nutrição..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Estado Civil</label>
+                            <select name="estadoCivil">
+                                <option value="">Selecione</option>
+                                <option value="solteiro">Solteiro(a)</option>
+                                <option value="casado">Casado(a)</option>
+                                <option value="divorciado">Divorciado(a)</option>
+                                <option value="viuvo">Viúvo(a)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Ocupação</label>
+                            <input type="text" name="ocupacao" placeholder="Profissão/atividade">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Hábitos de Vida</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="tabagista"> Tabagista</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="etilista"> Etilista</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="sedentario"> Sedentário</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="atividade-leve"> Atividade física leve</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="atividade-moderada"> Atividade física moderada</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="atividade-intensa"> Atividade física intensa</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANTROPOMETRIA -->
+                <section id="antropometria" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-ruler"></i> Antropometria</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Peso Atual (kg) *</label>
+                                <input type="number" name="pesoAtual" id="pesoAtual" placeholder="70.0" step="0.1" required onchange="calcularIMCNutri()">
+                            </div>
+                            <div class="form-group">
+                                <label>Peso Habitual (kg)</label>
+                                <input type="number" name="pesoHabitual" placeholder="70.0" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Altura (m) *</label>
+                                <input type="number" name="altura" id="alturaNutri" placeholder="1.70" step="0.01" required onchange="calcularIMCNutri()">
+                            </div>
+                            <div class="form-group">
+                                <label>IMC</label>
+                                <input type="text" name="imc" id="imcNutri" placeholder="Calculado automaticamente" readonly style="background: #f3f4f6;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Classificação do IMC</label>
+                            <input type="text" name="classificacaoIMC" id="classificacaoIMC" placeholder="Classificação automática" readonly style="background: #f3f4f6;">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Circunferência da Cintura (cm)</label>
+                                <input type="number" name="cintura" placeholder="80" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Circunferência do Quadril (cm)</label>
+                                <input type="number" name="quadril" placeholder="100" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Relação Cintura/Quadril</label>
+                            <input type="text" name="rcq" placeholder="Calculado automaticamente" readonly style="background: #f3f4f6;">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>CB (Circunferência do Braço) cm</label>
+                                <input type="number" name="cb" placeholder="30" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>AMC (Área Muscular do Braço) cm²</label>
+                                <input type="number" name="amc" placeholder="Calculo opcional" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Prega Cutânea Tricipital (mm)</label>
+                                <input type="number" name="pct" placeholder="15" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Prega Cutânea Subescapular (mm)</label>
+                                <input type="number" name="pcs" placeholder="18" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Outras Medidas</label>
+                            <textarea name="outrasMedidas" rows="3" placeholder="Outras pregas cutâneas, circunferências específicas..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANAMNESE ALIMENTAR -->
+                <section id="anamnese" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-comments"></i> Anamnese Alimentar</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Recordatório 24h</label>
+                            <textarea name="recordatorio24h" rows="6" placeholder="Descreva tudo o que o paciente comeu nas últimas 24 horas, incluindo horários..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Frequência Alimentar</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Café da manhã</label>
+                                    <input type="text" name="cafe" placeholder="Horário e conteúdo">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Lanche da manhã</label>
+                                    <input type="text" name="lancheManha" placeholder="Horário e conteúdo">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Almoço</label>
+                                    <input type="text" name="almoco" placeholder="Horário e conteúdo">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Lanche da tarde</label>
+                                    <input type="text" name="lancheTarde" placeholder="Horário e conteúdo">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Jantar</label>
+                                    <input type="text" name="jantar" placeholder="Horário e conteúdo">
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-size: 0.75rem;">Ceia</label>
+                                    <input type="text" name="ceia" placeholder="Horário e conteúdo">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Alergias Alimentares/Intolerâncias</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="gluten"> Glúten</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="lactose"> Lactose</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="ovo"> Ovo</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="peixe"> Peixe/Frutos do mar</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="amendoim"> Amendoim</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="soja"> Soja</label>
+                                <label class="checkbox-item"><input type="checkbox" name="alergias" value="outros"> Outros</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Preferências Alimentares</label>
+                            <textarea name="preferencias" rows="3" placeholder="Alimentos preferidos, alimentos de que não gosta..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Restrições Religiosas/Culturais</label>
+                            <textarea name="restricoes" rows="2" placeholder="Vegetarianismo, veganismo, restrições religiosas..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DIAGNÓSTICO -->
+                <section id="diagnostico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-diagnoses"></i> Diagnóstico Nutricional</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Diagnóstico Principal (NANDA)</label>
+                            <select name="diagnosticoNanda">
+                                <option value="">Selecione...</option>
+                                <option value="ingestao-inadequada">Ingestão de nutrientes inadequada</option>
+                                <option value="excesso-peso">Excesso de peso</option>
+                                <option value="obesidade">Obesidade</option>
+                                <option value="desnutricao">Desnutrição</option>
+                                <option value="risco-desnutricao">Risco de desnutrição</option>
+                                <option value="habitos-alimentares">Hábitos alimentares prejudiciais</option>
+                                <option value="conhecimento-deficit">Déficit de conhecimento</option>
+                                <option value="autoeficacia">Baixa autoeficácia para automanejo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Diagnósticos Secundários</label>
+                            <textarea name="diagnosticosSecundarios" rows="3" placeholder="Outros diagnósticos nutricionais..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Fatores de Risco</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="diabetes"> Diabetes Mellitus</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="hipertensao"> Hipertensão Arterial</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="dislipidemia"> Dislipidemia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="sindrome-metabolica"> Síndrome Metabólica</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="doenca-cardiovascular"> Doença Cardiovascular</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="doenca-renal"> Doença Renal</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="cancer"> Neoplasia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="fatoresRisco" value="gestacao"> Gestação</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRESCRIÇÃO -->
+                <section id="prescricao" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-utensils"></i> Prescrição Dietética</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Necessidade Energética Total (kcal)</label>
+                                <input type="number" name="vet" placeholder="2000" step="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Taxa Metabólica Basal (kcal)</label>
+                                <input type="number" name="tmb" placeholder="1500" step="10">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Distribuição de Macronutrientes</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem;">Carboidratos (%)</label>
+                                    <input type="number" name="pctCHO" placeholder="50-60%" min="0" max="100">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">Proteínas (%)</label>
+                                    <input type="number" name="pctPTN" placeholder="15-20%" min="0" max="100">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem;">Lipídios (%)</label>
+                                    <input type="number" name="pctLIP" placeholder="25-30%" min="0" max="100">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Prescrição Dietética Detalhada</label>
+                            <textarea name="prescricaoDietetica" rows="8" placeholder="Descreva o plano alimentar completo, incluindo:
+- Café da manhã
+- Lanche da manhã
+- Almoço
+- Lanche da tarde
+- Jantar
+- Ceia (se aplicável)
+Inclua quantidades aproximadas e substituições permitidas..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Orientações Nutricionais</label>
+                            <textarea name="orientacoes" rows="4" placeholder="Dicas de preparo, comportamento alimentar, leitura de rótulos, etc..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Retorno em</label>
+                            <select name="retorno">
+                                <option value="7">7 dias</option>
+                                <option value="15">15 dias</option>
+                                <option value="30">30 dias</option>
+                                <option value="60">60 dias</option>
+                                <option value="90">90 dias</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section id="historico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-history"></i> Meus Atendimentos</h2>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            Clique em <strong>Editar</strong> para modificar um prontuário existente, ou <strong>Visualizar</strong> para ver os detalhes completos.
+                            <br><small style="color: #8b5cf6;"><i class="fas fa-clipboard-check"></i> Prontuários marcados com "Triagem" foram encaminhados pela recepção.</small>
+                        </span>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Paciente</th>
+                                    <th>IMC</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-atendimentos">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProntuario()">
+                        <i class="fas fa-save"></i> Salvar Prontuário
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function calcularIMCNutri() {
+            const peso = parseFloat(document.getElementById('pesoAtual')?.value);
+            const altura = parseFloat(document.getElementById('alturaNutri')?.value);
+            
+            if (peso && altura && altura > 0) {
+                const imc = peso / (altura * altura);
+                const imcEl = document.getElementById('imcNutri');
+                const classEl = document.getElementById('classificacaoIMC');
+                
+                if (imcEl) imcEl.value = imc.toFixed(2);
+                
+                if (classEl) {
+                    let classificacao = '';
+                    let cor = '';
+                    
+                    if (imc < 18.5) {
+                        classificacao = 'Magreza';
+                        cor = '#f59e0b';
+                    } else if (imc < 25) {
+                        classificacao = 'Peso Normal';
+                        cor = '#10b981';
+                    } else if (imc < 30) {
+                        classificacao = 'Sobrepeso';
+                        cor = '#f59e0b';
+                    } else if (imc < 35) {
+                        classificacao = 'Obesidade Grau I';
+                        cor = '#ef4444';
+                    } else if (imc < 40) {
+                        classificacao = 'Obesidade Grau II';
+                        cor = '#dc2626';
+                    } else {
+                        classificacao = 'Obesidade Grau III';
+                        cor = '#991b1b';
+                    }
+                    
+                    classEl.value = classificacao;
+                    classEl.style.background = cor + '20';
+                    classEl.style.color = cor;
+                    classEl.style.borderColor = cor;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

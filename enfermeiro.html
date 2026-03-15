@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário de Enfermagem - Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header enfermeiro">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon enfermeiro">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Prontuário de Enfermagem</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="paciente-info">
+                <div class="info-field">
+                    <label>Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                </div>
+                <div class="info-field">
+                    <label>Cartão SUS</label>
+                    <input type="text" id="cartaoSUS" name="cartaoSUS" placeholder="000 0000 0000 0000">
+                </div>
+                <div class="info-field">
+                    <label>Tipo de Atendimento</label>
+                    <select id="tipoAtendimento" name="tipoAtendimento">
+                        <option value="consulta">Consulta</option>
+                        <option value="curativo">Curativo</option>
+                        <option value="vacina">Vacinação</option>
+                        <option value="coleta">Coleta de Material</option>
+                        <option value="procedimento">Procedimento</option>
+                        <option value="urgencia">Urgência/Emergência</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <div id="triagensPendentesProfissional" style="display: none;"></div>
+
+            <form id="form-prontuario">
+                
+                <nav class="tabs-nav">
+                    <button type="button" class="tab-button active" onclick="mudarAba('avaliacao')">
+                        <i class="fas fa-clipboard-check"></i> Avaliação
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('sinais-vitais')">
+                        <i class="fas fa-heartbeat"></i> Sinais Vitais
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('procedimentos')">
+                        <i class="fas fa-procedures"></i> Procedimentos
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('medicacao')">
+                        <i class="fas fa-pills"></i> Medicação
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('historico')">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                </nav>
+
+                <!-- AVALIAÇÃO -->
+                <section id="avaliacao" class="tab-content active">
+                    <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Avaliação de Enfermagem</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Queixa Principal *</label>
+                            <textarea name="queixaPrincipal" rows="3" placeholder="Motivo da consulta/procedimento..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Avaliação do Estado Geral</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="alerta"> Alerta</label>
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="orientado"> Orientado</label>
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="sonolento"> Sonolento</label>
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="obnubilado"> Obnubilado</label>
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="comatoso"> Comatoso</label>
+                                <label class="checkbox-item"><input type="checkbox" name="estadoGeral" value="agitado"> Agitado</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Condições de Acesso Venoso</label>
+                            <select name="acessoVenoso">
+                                <option value="sem">Sem acesso venoso</option>
+                                <option value="periferico">Acesso periférico</option>
+                                <option value="central">Acesso central</option>
+                                <option value="picc">PICC</option>
+                                <option value="portocath">Port-a-cath</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Alergias</label>
+                            <textarea name="alergias" rows="2" placeholder="Medicamentos, látex, alimentos..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Histórico Relevante</label>
+                            <textarea name="historico" rows="3" placeholder="Doenças prévias, cirurgias, internações recentes..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SINAIS VITAIS -->
+                <section id="sinais-vitais" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-heartbeat"></i> Sinais Vitais e Medidas</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Pressão Arterial (mmHg)</label>
+                                <input type="text" name="pa" placeholder="120/80">
+                            </div>
+                            <div class="form-group">
+                                <label>Pulso (bpm)</label>
+                                <input type="number" name="pulso" placeholder="72">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Frequência Respiratória (irpm)</label>
+                                <input type="number" name="fr" placeholder="16">
+                            </div>
+                            <div class="form-group">
+                                <label>Temperatura (°C)</label>
+                                <input type="number" name="temperatura" placeholder="36.5" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Saturação O2 (%)</label>
+                                <input type="number" name="spo2" placeholder="98" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Glicemia Capilar (mg/dL)</label>
+                                <input type="number" name="glicemia" placeholder="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Peso (kg)</label>
+                                <input type="number" name="peso" placeholder="70.0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Altura (m)</label>
+                                <input type="number" name="altura" placeholder="1.70" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>IMC</label>
+                            <input type="text" name="imc" placeholder="Calculado automaticamente" readonly style="background: #f3f4f6;">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Escala de Dor (0-10)</label>
+                            <input type="range" name="escalaDor" min="0" max="10" value="0" style="width: 100%;" oninput="this.nextElementSibling.value = this.value">
+                            <output style="display: block; text-align: center; font-weight: 600; color: #2563eb; margin-top: 0.5rem;">0</output>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Escala de Glasgow (se aplicável)</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem; color: #6b7280;">Abertura Ocular</label>
+                                    <select name="glasgowOcular">
+                                        <option value="4">4 - Espontânea</option>
+                                        <option value="3">3 - À voz</option>
+                                        <option value="2">2 - À dor</option>
+                                        <option value="1">1 - Nenhuma</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; color: #6b7280;">Resposta Verbal</label>
+                                    <select name="glasgowVerbal">
+                                        <option value="5">5 - Orientado</option>
+                                        <option value="4">4 - Confuso</option>
+                                        <option value="3">3 - Palavras inapropriadas</option>
+                                        <option value="2">2 - Sons incompreensíveis</option>
+                                        <option value="1">1 - Nenhuma</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; color: #6b7280;">Resposta Motora</label>
+                                    <select name="glasgowMotora">
+                                        <option value="6">6 - Obedece comandos</option>
+                                        <option value="5">5 - Localiza dor</option>
+                                        <option value="4">4 - Retirada à dor</option>
+                                        <option value="3">3 - Flexão anormal</option>
+                                        <option value="2">2 - Extensão anormal</option>
+                                        <option value="1">1 - Nenhuma</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROCEDIMENTOS -->
+                <section id="procedimentos" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-procedures"></i> Procedimentos de Enfermagem</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Procedimentos Realizados</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="curativo"> Curativo</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="cateterismo"> Cateterismo Vesical</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="sondagem"> Sondagem Nasoenteral</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="aspiracao"> Aspiração de Vias Aéreas</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="nebulizacao"> Nebulização</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="oxigenioterapia"> Oxigenioterapia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="vacina"> Administração de Vacina</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="coleta"> Coleta de Material</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="gesso"> Imobilização/Gesso</label>
+                                <label class="checkbox-item"><input type="checkbox" name="procedimentos" value="punção"> Punção Venosa</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Descrição dos Procedimentos</label>
+                            <textarea name="descricaoProcedimentos" rows="4" placeholder="Detalhamento dos procedimentos realizados, técnica utilizada, material empregado..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Curativo (se aplicável)</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <select name="tipoCurativo">
+                                    <option value="">Tipo de curativo...</option>
+                                    <option value="limpo">Limpo e seco</option>
+                                    <option value="essudativo">Essudativo</option>
+                                    <option value="infectado">Infectado</option>
+                                    <option value="debridamento">Com debridamento</option>
+                                    <option value="hidrocoloide">Hidrocoloide</option>
+                                    <option value="hidrogel">Hidrogel</option>
+                                    <option value="espuma">Espuma</option>
+                                    <option value="prata">Com prata</option>
+                                </select>
+                                <select name="frequenciaCurativo">
+                                    <option value="">Frequência...</option>
+                                    <option value="24h">A cada 24h</option>
+                                    <option value="48h">A cada 48h</option>
+                                    <option value="72h">A cada 72h</option>
+                                    <option value="semanal">Semanal</option>
+                                    <option value="cd">Conforme necessidade</option>
+                                </select>
+                            </div>
+                            <textarea name="descricaoCurativo" rows="3" placeholder="Descrição da lesão, localização, tamanho, aspecto..." style="margin-top: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MEDICAÇÃO -->
+                <section id="medicacao" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-pills"></i> Administração de Medicação</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Medicações Administradas</label>
+                            <textarea name="medicacoes" rows="6" placeholder="1. Nome do medicamento - Dose - Via - Horário...
+2. ...
+3. ..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Via de Administração</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="oral"> Oral</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="iv"> Endovenosa (IV)</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="im"> Intramuscular (IM)</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="sc"> Subcutânea (SC)</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value=" retal"> Retal</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="topica"> Tópica</label>
+                                <label class="checkbox-item"><input type="checkbox" name="vias" value="inalatoria"> Inalatória</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Horário da Próxima Medicação</label>
+                            <input type="time" name="proximaMedicacao">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Observações sobre Medicação</label>
+                            <textarea name="obsMedicacao" rows="3" placeholder="Reações adversas, interações, não administração e motivo..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section id="historico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-history"></i> Meus Atendimentos</h2>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            Clique em <strong>Editar</strong> para modificar um prontuário existente, ou <strong>Visualizar</strong> para ver os detalhes completos.
+                            <br><small style="color: #8b5cf6;"><i class="fas fa-clipboard-check"></i> Prontuários marcados com "Triagem" foram encaminhados pela recepção.</small>
+                        </span>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Tipo</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-atendimentos">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProntuario()">
+                        <i class="fas fa-save"></i> Salvar Prontuário
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+</body>
+</html>

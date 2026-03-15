@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Médico - Nossa Senhora De Lourdes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="prontuario-container">
+        
+        <header class="prontuario-header medico">
+            <div class="header-top">
+                <div class="professional-info">
+                    <div class="professional-icon medico">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="professional-details">
+                        <h1>Prontuário Médico</h1>
+                        <span class="profissao-nome"><i class="fas fa-user"></i> <span id="nomeProfissionalLogado">Carregando...</span></span>
+                        <br>
+                        <span class="cidade-badge"><i class="fas fa-map-marker-alt"></i> <span class="cidade-nome">Nossa Senhora De Lourdes - SE</span></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-header" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-header sair" onclick="fazerLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="paciente-info">
+                <div class="info-field">
+                    <label>Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                </div>
+                <div class="info-field">
+                    <label>Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                </div>
+                <div class="info-field">
+                    <label>Cartão SUS</label>
+                    <input type="text" id="cartaoSUS" name="cartaoSUS" placeholder="000 0000 0000 0000">
+                </div>
+                <div class="info-field">
+                    <label>Sexo</label>
+                    <select id="sexo" name="sexo">
+                        <option value="">Selecione</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main class="prontuario-content">
+            
+            <!-- Triagens Pendentes (só aparece se houver) -->
+            <div id="triagensPendentesProfissional" style="display: none;"></div>
+
+            <form id="form-prontuario">
+                
+                <nav class="tabs-nav">
+                    <button type="button" class="tab-button active" onclick="mudarAba('anamnese')">
+                        <i class="fas fa-comments"></i> Anamnese
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('exame-fisico')">
+                        <i class="fas fa-stethoscope"></i> Exame Físico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('diagnostico')">
+                        <i class="fas fa-diagnoses"></i> Diagnóstico
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('prescricao')">
+                        <i class="fas fa-prescription"></i> Prescrição
+                    </button>
+                    <button type="button" class="tab-button" onclick="mudarAba('historico')">
+                        <i class="fas fa-history"></i> Histórico
+                    </button>
+                </nav>
+
+                <!-- ANAMNESE -->
+                <section id="anamnese" class="tab-content active">
+                    <h2 class="section-title"><i class="fas fa-comments"></i> Anamnese</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Queixa Principal *</label>
+                            <textarea name="queixaPrincipal" rows="3" placeholder="Motivo da consulta em suas próprias palavras..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História da Moléstia Atual (HMA)</label>
+                            <textarea name="hma" rows="4" placeholder="Início, duração, evolução, características, fatores agravantes/atenuantes..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História Patológica Pregressa (HPP)</label>
+                            <textarea name="hpp" rows="3" placeholder="Doenças prévias, cirurgias, internações..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História Familiar (HF)</label>
+                            <textarea name="hf" rows="3" placeholder="Doenças familiares relevantes..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>História Social e Hábitos</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="tabagista"> Tabagista</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="etilista"> Etilista</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="drogas"> Uso de drogas</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="sedentario"> Sedentário</label>
+                                <label class="checkbox-item"><input type="checkbox" name="habitos" value="atividade-fisica"> Atividade física regular</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Alergias</label>
+                            <textarea name="alergias" rows="2" placeholder="Medicamentos, alimentos, outros..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Uso de Medicamentos Contínuos</label>
+                            <textarea name="medicamentos" rows="3" placeholder="Liste os medicamentos em uso..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXAME FÍSICO -->
+                <section id="exame-fisico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-stethoscope"></i> Exame Físico</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Pressão Arterial (mmHg)</label>
+                                <input type="text" name="pa" placeholder="120/80">
+                            </div>
+                            <div class="form-group">
+                                <label>Frequência Cardíaca (bpm)</label>
+                                <input type="number" name="fc" placeholder="72">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Frequência Respiratória (irpm)</label>
+                                <input type="number" name="fr" placeholder="16">
+                            </div>
+                            <div class="form-group">
+                                <label>Temperatura (°C)</label>
+                                <input type="number" name="temp" placeholder="36.5" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Saturação O2 (%)</label>
+                                <input type="number" name="spo2" placeholder="98" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Glicemia Capilar (mg/dL)</label>
+                                <input type="number" name="glicemia" placeholder="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Peso (kg)</label>
+                                <input type="number" name="peso" id="peso" placeholder="70.0" step="0.1" onchange="calcularIMC()">
+                            </div>
+                            <div class="form-group">
+                                <label>Altura (m)</label>
+                                <input type="number" name="altura" id="altura" placeholder="1.70" step="0.01" onchange="calcularIMC()">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>IMC</label>
+                            <input type="text" name="imc" id="imc" placeholder="Calculado automaticamente" readonly style="background: #f3f4f6;">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Estado Geral</label>
+                            <select name="estadoGeral">
+                                <option value="bom">Bom</option>
+                                <option value="regular">Regular</option>
+                                <option value="ruim">Ruim</option>
+                                <option value="grave">Grave</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Exame Físico Segmentar</label>
+                            <textarea name="efSegmentar" rows="6" placeholder="Cabeça, pescoço, tórax, abdome, membros, pele, etc..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DIAGNÓSTICO -->
+                <section id="diagnostico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-diagnoses"></i> Diagnóstico</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Diagnóstico Principal (CID-10)</label>
+                            <input type="text" name="cidPrincipal" placeholder="Código CID-10">
+                            <textarea name="diagnosticoPrincipal" rows="2" placeholder="Descrição do diagnóstico principal..." style="margin-top: 0.5rem;"></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Diagnósticos Secundários</label>
+                            <textarea name="diagnosticosSecundarios" rows="3" placeholder="Outros diagnósticos relevantes..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Conduta</label>
+                            <select name="conduta">
+                                <option value="retorno">Aguardar retorno</option>
+                                <option value="retorno-urgente">Retorno urgente</option>
+                                <option value="encaminhamento">Encaminhamento especializado</option>
+                                <option value="internacao">Internação</option>
+                                <option value="alta">Alta do tratamento</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Observações e Orientações</label>
+                            <textarea name="observacoes" rows="4" placeholder="Orientações ao paciente, cuidados, sinais de alarme..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRESCRIÇÃO -->
+                <section id="prescricao" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-prescription"></i> Prescrição Médica</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Medicamentos Prescritos</label>
+                            <textarea name="prescricaoMedicamentos" rows="6" placeholder="1. Medicamento - Dose - Via - Frequência - Duração..."></textarea>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Exames Solicitados</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="hemograma"> Hemograma</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="glicemia"> Glicemia</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="ureia-creatinina"> Ureia/Creatinina</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="tgo-tgp"> TGO/TGP</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="lipidograma"> Lipidograma</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="raio-x"> Raio-X</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="ultrassom"> Ultrassom</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="eletrocardiograma"> Eletrocardiograma</label>
+                                <label class="checkbox-item"><input type="checkbox" name="exames" value="outros"> Outros</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Outros Exames/Procedimentos</label>
+                            <textarea name="outrosExames" rows="3" placeholder="Descreva outros exames ou procedimentos solicitados..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Retorno em</label>
+                            <select name="retorno">
+                                <option value="7">7 dias</option>
+                                <option value="15">15 dias</option>
+                                <option value="30">30 dias</option>
+                                <option value="60">60 dias</option>
+                                <option value="90">90 dias</option>
+                                <option value="nao-necessario">Não necessário</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTÓRICO -->
+                <section id="historico" class="tab-content">
+                    <h2 class="section-title"><i class="fas fa-history"></i> Meus Atendimentos</h2>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            Clique em <strong>Editar</strong> para modificar um prontuário existente, ou <strong>Visualizar</strong> para ver os detalhes completos.
+                            <br><small style="color: #8b5cf6;"><i class="fas fa-clipboard-check"></i> Prontuários marcados com "Triagem" foram encaminhados pela recepção.</small>
+                        </span>
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-atendimentos">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: #9ca3af; padding: 2rem;">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="salvarProntuario()">
+                        <i class="fas fa-save"></i> Salvar Prontuário
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function calcularIMC() {
+            const peso = parseFloat(document.getElementById('peso')?.value);
+            const altura = parseFloat(document.getElementById('altura')?.value);
+            
+            if (peso && altura && altura > 0) {
+                const imc = peso / (altura * altura);
+                const imcEl = document.getElementById('imc');
+                if (imcEl) {
+                    imcEl.value = imc.toFixed(2);
+                    
+                    // Adiciona interpretação visual
+                    let classificacao = '';
+                    let cor = '';
+                    
+                    if (imc < 18.5) { classificacao = ' (Abaixo do peso)'; cor = '#f59e0b'; }
+                    else if (imc < 25) { classificacao = ' (Peso normal)'; cor = '#10b981'; }
+                    else if (imc < 30) { classificacao = ' (Sobrepeso)'; cor = '#f59e0b'; }
+                    else { classificacao = ' (Obesidade)'; cor = '#ef4444'; }
+                    
+                    imcEl.style.background = cor + '20';
+                    imcEl.style.color = cor;
+                    imcEl.style.borderColor = cor;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
